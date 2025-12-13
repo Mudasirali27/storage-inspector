@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storage Inspector</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">
+          <!-- Hacker-style storage logo: Database with binary/matrix effect -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Database layers -->
+            <ellipse cx="12" cy="5" rx="8" ry="3" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" stroke="currentColor" stroke-width="1.8"/>
+            <!-- Binary data points -->
+            <circle cx="8" cy="9" r="1" fill="currentColor" opacity="0.8"/>
+            <circle cx="12" cy="8" r="1" fill="currentColor" opacity="0.6"/>
+            <circle cx="16" cy="9" r="1" fill="currentColor" opacity="0.8"/>
+            <circle cx="9" cy="15" r="1" fill="currentColor" opacity="0.6"/>
+            <circle cx="15" cy="15" r="1" fill="currentColor" opacity="0.8"/>
+          </svg>
+        </div>
+        <h1 class="title">Storage Inspector</h1>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="refreshBtn" title="Refresh">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M23 4v6h-6M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+          </svg>
+        </button>
+        <button class="expand-btn" id="expandBtn" title="Open in new window">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+          </svg>
+        </button>
+        <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle Theme">
+          <svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Tab Selector (for fullscreen mode) -->
+    <div class="tab-selector" id="tabSelector">
+      <span class="tab-selector-label">Target Tab:</span>
+      <select id="browserTabSelect">
+        <option value="">Loading tabs...</option>
+      </select>
+    </div>
+
+    <!-- Domain Info -->
+    <div class="domain-bar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+      </svg>
+      <span class="domain-value" id="currentDomain">loading...</span>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="localStorage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+        </svg>
+        <span>Local</span>
+        <span class="badge" id="localStorageCount">0</span>
+      </button>
+      <button class="tab" data-tab="sessionStorage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M3 9h18M9 21V9"/>
+        </svg>
+        <span>Session</span>
+        <span class="badge" id="sessionStorageCount">0</span>
+      </button>
+      <button class="tab" data-tab="cookies">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="8" cy="9" r="1" fill="currentColor"/>
+          <circle cx="15" cy="8" r="1" fill="currentColor"/>
+          <circle cx="10" cy="14" r="1" fill="currentColor"/>
+          <circle cx="16" cy="13" r="1" fill="currentColor"/>
+        </svg>
+        <span>Cookies</span>
+        <span class="badge" id="cookiesCount">0</span>
+      </button>
+    </nav>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button class="clear-search" id="clearSearch">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="toolbar-actions">
+        <button class="btn btn-icon" id="exportBtn" title="Export">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+        </button>
+        <button class="btn btn-icon" id="importBtn" title="Import">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+        </button>
+        <button class="btn btn-primary" id="addNewBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <span>Add</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <main class="content" id="contentArea">
+      <!-- Storage List -->
+      <div class="storage-list" id="storageList"></div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+            <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/>
+          </svg>
+        </div>
+        <h3>No Data</h3>
+        <p>Storage is empty or no matches found</p>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state" id="loadingState">
+        <div class="spinner"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>Storage Inspector</span>
+      <span class="dot">·</span>
+      <span>Security Research Tool</span>
+    </footer>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add New Item</h2>
+        <button class="modal-close" id="modalClose">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <form class="modal-body" id="editForm">
+        <div class="form-group">
+          <label for="itemKey">Key</label>
+          <input type="text" id="itemKey" placeholder="Enter key name" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="itemValue">Value</label>
+          <textarea id="itemValue" placeholder="Enter value (JSON supported)" rows="5" required></textarea>
+        </div>
+        <!-- Cookie-specific fields -->
+        <div class="cookie-fields" id="cookieFields">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cookieDomain">Domain</label>
+              <input type="text" id="cookieDomain" placeholder=".example.com" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="cookiePath">Path</label>
+              <input type="text" id="cookiePath" placeholder="/" value="/" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cookieExpires">Expires</label>
+              <input type="datetime-local" id="cookieExpires">
+            </div>
+            <div class="form-group">
+              <label for="cookieSameSite">SameSite</label>
+              <select id="cookieSameSite">
+                <option value="lax">Lax</option>
+                <option value="strict">Strict</option>
+                <option value="no_restriction">None</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row checkbox-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="cookieSecure">
+              <span class="checkmark"></span>
+              <span>Secure</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="cookieHttpOnly">
+              <span class="checkmark"></span>
+              <span>HttpOnly</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Import Modal -->
+  <div class="modal" id="importModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Import Data</h2>
+        <button class="modal-close" id="importModalClose">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="import-tabs">
+          <button type="button" class="import-tab active" data-import="file">File</button>
+          <button type="button" class="import-tab" data-import="text">Paste</button>
+        </div>
+        <div class="import-content" id="importFileContent">
+          <div class="drop-zone" id="dropZone">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            <p>Drop JSON file or click</p>
+            <input type="file" id="importFile" accept=".json" hidden>
+          </div>
+        </div>
+        <div class="import-content hidden" id="importTextContent">
+          <textarea id="importText" placeholder="Paste JSON data here..." rows="8"></textarea>
+        </div>
+        <div class="import-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="mergeImport" checked>
+            <span class="checkmark"></span>
+            <span>Merge with existing data</span>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="importCancelBtn">Cancel</button>
+          <button type="button" class="btn btn-primary" id="importConfirmBtn">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div class="modal" id="exportModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Export Data</h2>
+        <button class="modal-close" id="exportModalClose">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="export-options">
+          <p class="export-label">Select data to export:</p>
+          <div class="export-checkboxes">
+            <label class="checkbox-label">
+              <input type="checkbox" id="exportLocalStorage" checked>
+              <span class="checkmark"></span>
+              <span>LocalStorage</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="exportSessionStorage" checked>
+              <span class="checkmark"></span>
+              <span>SessionStorage</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="exportCookies" checked>
+              <span class="checkmark"></span>
+              <span>Cookies</span>
+            </label>
+          </div>
+        </div>
+        <div class="export-preview">
+          <label>Preview</label>
+          <pre id="exportPreview"></pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="exportCopyBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+            Copy
+          </button>
+          <button type="button" class="btn btn-primary" id="exportDownloadBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Download
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
